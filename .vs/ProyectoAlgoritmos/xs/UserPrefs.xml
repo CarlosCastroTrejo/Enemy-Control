@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{F079ACDF-196D-8C2A-778C-3F89DDDA5676}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/MonteCarlo.cs">
+    <Files>
+      <File FileName="Assets/Scripts/MonteCarlo.cs" Line="73" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="252b925a-8fd0-461e-a642-abebca93ef4b" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
