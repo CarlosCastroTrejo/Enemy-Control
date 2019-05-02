@@ -5,17 +5,21 @@ using UnityEngine;
 
 public class MonteCarlo : MonoBehaviour {
 
-    public NavMeshAgent agent;
-    public Collider[] points;
-    public float[] distanciasTotales;
-    public GameObject player;
-    public GameObject nextDistance;
-    public int radio;
-    public Color color;
+    // Public variables
+
+    public NavMeshAgent agent; // NavMesh agent so enemies can have AI
+    public Collider[] points; // Array of colliders that we obtain with the OverlapSphere
+    public float[] totalDistances; //Array of floats of the  distances between the enemy-waypoint-player
+    public GameObject player; // Gameobject player
+    public GameObject nextPoint; // GameObject next point to travel
+    public int radio; // Radio of the OverslapSphere
+    public Color color; // Color of the debug
 
 
 
-    // Use this for initialization
+    // getDistances: Get the total distances from the enemy to the player passing through the specific waypoint
+    // Input: Array of Colliders representing the object near the enemy
+    // Output: Array of floats representing the distances
 
     float[] getDistances(Collider[] points) 
     {
@@ -27,6 +31,11 @@ public class MonteCarlo : MonoBehaviour {
         return distancias;
     }
 
+
+    // setDistance: Get the objects around the enemies, applies the monte carlo algorithm and assing the navMesh agent a destination
+    // Input: 
+    // Output: 
+
     void setDistance()
     {
         points = Physics.OverlapSphere(this.transform.position,radio,1);
@@ -37,27 +46,29 @@ public class MonteCarlo : MonoBehaviour {
         }
         else
         {
-            distanciasTotales = getDistances(points);
-            int n = distanciasTotales.Length;
+            totalDistances = getDistances(points);
+            int n = totalDistances.Length;
             float aux = 0;
-            float menor = 1000000;
-            int indiceMenor = 0;
+            float smaller = 1000000;
+            int smallerIndex = 0;
 
+
+            // MonteCarlo Algorithm
             for (int i = 0; i < n / 2; i++)
             {
                 int x = Random.Range(0, n - 1);
-                aux = distanciasTotales[x];
-                if (aux < menor)
+                aux = totalDistances[x];
+                if (aux < smaller)
                 {
-                    menor = aux;
-                    indiceMenor = x;
+                    smaller = aux;
+                    smallerIndex = x;
                 }
             }
 
 
-            Debug.Log(points.Length + " ----- " + indiceMenor);
-            nextDistance = points[indiceMenor].transform.gameObject;
-            this.agent.SetDestination(nextDistance.transform.position);
+            Debug.Log(points.Length + " ----- " + smallerIndex);
+            nextPoint = points[smallerIndex].transform.gameObject;
+            this.agent.SetDestination(nextPoint.transform.position);
         }
     }
 
@@ -66,6 +77,7 @@ public class MonteCarlo : MonoBehaviour {
     {
         agent = this.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
+        Random.InitState(System.DateTime.Now.Millisecond);
         setDistance();
 		
 	}
@@ -73,9 +85,8 @@ public class MonteCarlo : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
+        // Debug in order to see the Sphere of the OverlapSphere
         DebugExtension.DebugWireSphere(this.transform.position,color,radio);
-
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -84,9 +95,9 @@ public class MonteCarlo : MonoBehaviour {
         {
             Debug.Log("Ganado");
         }
-        else if (other.gameObject == nextDistance)
+        else if (other.gameObject == nextPoint)
         {
-            nextDistance.layer = 1;
+            nextPoint.layer = 1;
             setDistance();
             Debug.Log("Llegado");
         }
